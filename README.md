@@ -77,7 +77,7 @@ Dashboard (Streamlit) — simulação com aportes dinâmicos
 - [x] Armazenamento em SQLite
 - [x] Transformação e cálculo de retorno mensal/acumulado
 - [x] Dashboard interativo (Streamlit) com aportes dinâmicos
-- [ ] Automação (GitHub Actions, atualização semanal)
+- [x] Automação (GitHub Actions, atualização semanal — [workflow](.github/workflows/atualizar-dados.yml))
 - [ ] Migração para cloud (Supabase) — avaliado, não priorizado no MVP
 
 ## Setup
@@ -109,7 +109,6 @@ dashboard para detalhes.
 
 ## Próximos passos
 
-- Automatizar a atualização semanal via GitHub Actions
 - Modelar produtos reais com carência (ex: CDB 1 ano) como opção
   alternativa de simulação
 - Avaliar migração da camada de armazenamento para Supabase (Postgres
