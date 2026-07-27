@@ -1,0 +1,42 @@
+name: Atualizar dados semanalmente
+
+on:
+  schedule:
+    # Toda segunda-feira às 06:00 UTC (03:00 no horário de Brasília)
+    - cron: "0 6 * * 1"
+  workflow_dispatch:  # permite rodar manualmente pela aba Actions do GitHub
+
+permissions:
+  contents: write  # necessário para o workflow poder commitar de volta no repositório
+
+jobs:
+  atualizar-dados:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Rodar o pipeline (extração, carga, transformação)
+        working-directory: src
+        run: |
+          python extract_bacen.py
+          python extract_yfinance.py
+          python load_to_sqlite.py
+          python transform.py
+
+      - name: Commitar dados atualizados
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "Atualização automática dos dados $(date +'%Y-%m-%d')"
+          git push
